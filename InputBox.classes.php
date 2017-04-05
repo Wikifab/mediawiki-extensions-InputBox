@@ -320,15 +320,21 @@ class InputBox {
 			)
 		);
 		$htmlOut .= $htmlLabel;
-		$htmlOut .= Xml::element( 'input',
-			array(
+
+		$htmlOut .= $htmlLabel;
+		$inputParam = array(
 				'type' => $this->mHidden ? 'hidden' : 'text',
 				'name' => 'search',
 				'class' => 'mw-ui-input mw-ui-input-inline',
 				'size' => $this->mWidth,
 				'id' => 'bodySearchInput' . $id,
 				'dir' => $this->mDir,
-			)
+		);
+		if ($this->mPlaceholderText) {
+			$inputParam['placeholder'] = $this->mPlaceholderText;
+		}
+		$htmlOut .= Xml::element( 'input',
+				$inputParam
 		);
 		$htmlOut .= '&#160;' . Xml::element( 'input',
 			array(
@@ -398,15 +404,19 @@ class InputBox {
 			)
 		);
 		$htmlOut .= $htmlLabel;
-		$htmlOut .= Xml::element( 'input',
-			array(
+		$inputParam = array(
 				'type' => $this->mHidden ? 'hidden' : 'text',
 				'name' => 'wfsearch',
 				'class' => 'mw-ui-input mw-ui-input-inline',
 				'size' => $this->mWidth,
 				'id' => 'bodySearchInput' . $id,
 				'dir' => $this->mDir,
-			)
+		);
+		if ($this->mPlaceholderText) {
+			$inputParam['placeholder'] = $this->mPlaceholderText;
+		}
+		$htmlOut .= Xml::element( 'input',
+				$inputParam
 		);
 		$htmlOut .= '&#160;' . Xml::element( 'input',
 			array(
