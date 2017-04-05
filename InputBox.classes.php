@@ -70,6 +70,8 @@ class InputBox {
 				return $this->getSearchForm('fulltext');
 			case 'search2':
 				return $this->getSearchForm2();
+			case 'wfsearch':
+				return $this->getWfSearchForm2();
 			default:
 				return Xml::tags( 'div', null,
 					Xml::element( 'strong',
@@ -322,6 +324,84 @@ class InputBox {
 			array(
 				'type' => $this->mHidden ? 'hidden' : 'text',
 				'name' => 'search',
+				'class' => 'mw-ui-input mw-ui-input-inline',
+				'size' => $this->mWidth,
+				'id' => 'bodySearchInput' . $id,
+				'dir' => $this->mDir,
+			)
+		);
+		$htmlOut .= '&#160;' . Xml::element( 'input',
+			array(
+				'type' => 'submit',
+				'name' => 'go',
+				'value' => $this->mButtonLabel,
+				'class' => 'mw-ui-button',
+			)
+		);
+
+		// Better testing needed here!
+		if ( !empty( $this->mFullTextButton ) ) {
+			$htmlOut .= Xml::element( 'input',
+				array(
+					'type' => 'submit',
+					'name' => 'fulltext',
+					'class' => 'mw-ui-button',
+					'value' => $this->mSearchButtonLabel
+				)
+			);
+		}
+
+		$htmlOut .= Xml::closeElement( 'div' );
+		$htmlOut .= Xml::closeElement( 'form' );
+
+		// Return HTML
+		return $htmlOut;
+	}
+
+	/**
+	 * Generate search form version 2 for Wikifab search
+	 */
+	public function getWfSearchForm2() {
+		// Use button label fallbacks
+		if ( !$this->mButtonLabel ) {
+			$this->mButtonLabel = wfMessage( 'inputbox-tryexact' )->text();
+		}
+
+		if ( $this->mID !== '' ) {
+			$unescapedID = $this->mID;
+		} else {
+			// The label element needs a unique id, use
+			// random number to avoid multiple input boxes
+			// having conflicts.
+			$unescapedID = wfRandom();
+		}
+		$id = Sanitizer::escapeId( $unescapedID, 'noninitial' );
+		$htmlLabel = '';
+		if ( isset( $this->mLabelText ) && strlen( trim( $this->mLabelText ) ) ) {
+			$this->mLabelText = $this->mParser->recursiveTagParse( $this->mLabelText );
+			$htmlLabel = Xml::openElement( 'label', array( 'for' => 'bodySearchInput' . $id ) );
+			$htmlLabel .= $this->mLabelText;
+			$htmlLabel .= Xml::closeElement( 'label' );
+		}
+		$htmlOut = Xml::openElement( 'form',
+			array(
+				'name' => 'bodySearch' . $id,
+				'id' => 'bodySearch' . $id,
+				'class' => 'bodySearch' . ( $this->mInline ? ' mw-inputbox-inline' : '' ),
+				'action' => SpecialPage::getTitleFor( 'WfSearch' )->getLocalUrl(),
+			)
+		);
+		$htmlOut .= Xml::openElement( 'div',
+			array(
+				'class' => 'bodySearchWrap' . ( $this->mInline ? ' mw-inputbox-inline' : '' ),
+				'style' => $this->bgColorStyle(),
+			)
+		);
+		$htmlOut .= $htmlLabel;
+		$htmlOut .= Xml::element( 'input',
+			array(
+				'type' => $this->mHidden ? 'hidden' : 'text',
+				'name' => 'wfsearch',
 				'class' => 'mw-ui-input mw-ui-input-inline',
 				'size' => $this->mWidth,
 				'id' => 'bodySearchInput' . $id,
