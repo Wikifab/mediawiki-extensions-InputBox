@@ -25,5 +25,18 @@
 		}
 
 		$input.on( 'keyup input change', $.debounce( 50, onChange ) );
+
+
+		//manage prefix when veaction=edit
+		$('form.createbox').has('input[name=veaction]').has('input[name=prefix]').submit(function () {
+			// for veaction, the 'prefix' params is not taken into acccount,
+			// so we add it to field before submit
+			var prefix = $(this).find('input[name=prefix]').val();
+			var title = $(this).find('input[name=title]').val();
+			if ( ! title.startsWith(prefix) ) {
+				$(this).find('input[name=title]').val(prefix + title);
+			}
+		});
+
 	} );
 }( jQuery, mediaWiki ) );
