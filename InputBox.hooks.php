@@ -17,6 +17,11 @@ class InputBoxHooks {
 		return true;
 	}
 
+	public static function onBeforePageDisplay( OutputPage &$out, Skin &$skin ) {
+		// should not be needed, but in some case, render is not called (cached)
+		$out->addModules('ext.inputBox');
+	}
+
 	// Prepend prefix to wpNewTitle if necessary
 	public static function onSpecialPageBeforeExecute( $special, $subPage ) {
 		$request = $special->getRequest();

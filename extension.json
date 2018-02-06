@@ -54,6 +54,9 @@
 		],
 		"SpecialPageBeforeExecute": [
 			"InputBoxHooks::onSpecialPageBeforeExecute"
+		],
+		"BeforePageDisplay": [
+			"InputBoxHooks::onBeforePageDisplay"
 		]
 	},
 	"ParserTestFiles": [
